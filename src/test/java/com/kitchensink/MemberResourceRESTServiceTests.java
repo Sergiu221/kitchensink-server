@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
@@ -19,8 +20,16 @@ import java.util.Objects;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public class MemberResourceRESTServiceTests {
-    private final String baseUrl = "http://localhost";
 
+    static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:6.0");
+
+    static {
+        mongoDBContainer.start();
+        System.setProperty("spring.data.mongodb.uri",
+                "mongodb://localhost:" + mongoDBContainer.getMappedPort(27017) + "/test_db");
+    }
+
+    private final String baseUrl = "http://localhost";
     @LocalServerPort
     private int port;
 
@@ -40,6 +49,7 @@ public class MemberResourceRESTServiceTests {
         ResponseEntity<?> response = testRestTemplate.postForEntity(url, entity, Object.class);
         Assertions.assertEquals(HttpStatus.CREATED, Objects.requireNonNull(response.getStatusCode()));
     }
+
     @Test
     void shouldReturnOkAfterFindAllMembers() {
         final String url = baseUrl + ":" + port + "/rest/members";
@@ -55,7 +65,7 @@ public class MemberResourceRESTServiceTests {
         member2.setPhoneNumber("2234567890");
         testRestTemplate.postForEntity(url, new HttpEntity<>(member2, new HttpHeaders()), Object.class);
 
-        ResponseEntity<?> response = testRestTemplate.getForEntity(url,Object.class);
+        ResponseEntity<?> response = testRestTemplate.getForEntity(url, Object.class);
         Assertions.assertEquals(HttpStatus.OK, Objects.requireNonNull(response.getStatusCode()));
         Assertions.assertEquals(2, ((List<?>) Objects.requireNonNull(response.getBody())).size());
     }
@@ -73,7 +83,7 @@ public class MemberResourceRESTServiceTests {
         member2.setName("Test Second");
         member2.setEmail("test1@test.com");
         member2.setPhoneNumber("2234567890");
-        ResponseEntity<?> response =testRestTemplate.postForEntity(url, new HttpEntity<>(member2, new HttpHeaders()), Object.class);
+        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member2, new HttpHeaders()), Object.class);
 
         Assertions.assertEquals(HttpStatus.CONFLICT, Objects.requireNonNull(response.getStatusCode()));
         Assertions.assertEquals("{email=Email taken}", Objects.requireNonNull(response.getBody()).toString());
@@ -87,9 +97,9 @@ public class MemberResourceRESTServiceTests {
         member.setEmail("test1@test.com");
         member.setPhoneNumber("223456789023232");
 
-        ResponseEntity<?> response =testRestTemplate.postForEntity(url, new HttpEntity<>(member, new HttpHeaders()), Object.class);
+        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member, new HttpHeaders()), Object.class);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, Objects.requireNonNull(response.getStatusCode()));
-        Assertions.assertEquals("{phoneNumber=numeric value out of bounds (<12 digits>.<0 digits> expected)}", Objects.requireNonNull(response.getBody()).toString());
+        Assertions.assertEquals("{phoneNumber=size must be between 10 and 12}", Objects.requireNonNull(response.getBody()).toString());
     }
 }

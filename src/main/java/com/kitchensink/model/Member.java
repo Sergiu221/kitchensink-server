@@ -19,7 +19,6 @@ package com.kitchensink.model;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -27,31 +26,32 @@ import jakarta.validation.constraints.Size;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@SuppressWarnings("serial")
-@Entity
 @JacksonXmlRootElement
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Document(collection = "member")
 public class Member implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Field
     private Long id;
 
     @NotNull
     @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
+    @Field
     private String name;
 
     @NotNull
     @NotEmpty
     @Email
+    @Field
     private String email;
 
     @NotNull
     @Size(min = 10, max = 12)
     @Digits(fraction = 0, integer = 12)
-    @Column(name = "phone_number")
+    @Field
     private String phoneNumber;
 
     public Long getId() {
