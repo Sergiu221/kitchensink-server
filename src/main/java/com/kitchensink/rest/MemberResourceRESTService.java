@@ -3,7 +3,6 @@ package com.kitchensink.rest;
 import com.kitchensink.data.MemberRepository;
 import com.kitchensink.model.Member;
 import com.kitchensink.service.MemberRegistration;
-import jakarta.persistence.NoResultException;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -94,11 +93,11 @@ public class MemberResourceRESTService {
 
     public boolean emailAlreadyExists(String email) {
         Member member = null;
-        try {
+        //try {
             member = memberRepository.findByEmail(email);
-        } catch (NoResultException e) {
+        //} catch (NoResultException e) {
             // ignore
-        }
+        //}
         return member != null;
     }
 }

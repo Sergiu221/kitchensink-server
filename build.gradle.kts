@@ -19,12 +19,9 @@ repositories {
 
 dependencies {
     // Spring Boot Starters
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // MariaDB JDBC driver
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.1.2")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // Spring Boot DevTools
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
@@ -45,7 +42,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:1.19.0")
 
     // Testcontainers MariaDB Module
-    testImplementation("org.testcontainers:mariadb:1.19.0")
+    testImplementation("org.testcontainers:mongodb:1.19.0")
 }
 
 tasks.withType<Test> {

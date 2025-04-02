@@ -11,15 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberRegistration {
     private final static Logger log = LoggerFactory.getLogger(MemberRegistration.class);
 
+    private final SequenceGeneratorService sequenceGenerator;
     private final MemberRepository memberRepository;
 
-    public MemberRegistration(MemberRepository memberRepository) {
+    public MemberRegistration(SequenceGeneratorService sequenceGenerator, MemberRepository memberRepository) {
+        this.sequenceGenerator = sequenceGenerator;
         this.memberRepository = memberRepository;
     }
 
     @Transactional
     public void register(Member member)  {
         log.info("Registering {}", member.getName());
+        member.setId(sequenceGenerator.generateSequence("member_sequence"));
         memberRepository.save(member);
     }
 }
