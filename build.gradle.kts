@@ -35,6 +35,10 @@ dependencies {
     // Jackson Dataformat XML
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1")
 
+    //JoinFaces basic starter
+
+    //PrimeFaces
+    implementation("org.joinfaces:primefaces-spring-boot-starter:5.4.0")
     // Testcontainers core dependency
     testImplementation("org.testcontainers:testcontainers:1.19.0")
 
