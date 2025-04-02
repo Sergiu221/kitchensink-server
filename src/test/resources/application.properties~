@@ -1,0 +1,7 @@
+spring.datasource.url=jdbc:tc:mariadb:10.6:///test_db
+spring.datasource.username=test_user
+spring.datasource.password=test_password
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+logging.level.org.springframework.security=DEBUG
+spring.jpa.hibernate.ddl-auto=create

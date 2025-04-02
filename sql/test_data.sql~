@@ -1,0 +1,11 @@
+CREATE TABLE Member
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(25) NOT NULL,
+    email      VARCHAR(25) UNIQUE,
+    phoneNumber VARCHAR(12)
+);
+
+INSERT INTO Member (name, email)
+VALUES ('Test User 1', 'test1@example.com'),
+       ('Test User 2', 'test2@example.com');
