@@ -2,7 +2,7 @@ package com.kitchensink.rest;
 
 import com.kitchensink.data.MemberRepository;
 import com.kitchensink.model.Member;
-import com.kitchensink.service.MemberRegistration;
+import com.kitchensink.service.MemberService;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,33 +16,33 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/rest/members")
-public class MemberResourceRESTService {
+public class MemberController {
 
-    private final static Logger log = Logger.getLogger(MemberResourceRESTService.class.getName());
-    @Autowired
-    private Validator validator;
+    private final static Logger log = Logger.getLogger(MemberController.class.getName());
 
+    private final Validator validator;
     private final MemberRepository memberRepository;
-    private final MemberRegistration registration;
+    private final MemberService registration;
 
-    public MemberResourceRESTService(MemberRepository memberRepository, MemberRegistration registration) {
-
+    @Autowired
+    public MemberController(MemberRepository memberRepository, MemberService registration, Validator validator) {
         this.memberRepository = memberRepository;
         this.registration = registration;
+        this.validator = validator;
     }
 
-    @GetMapping(produces = "application/json")
+    @GetMapping
     public List<Member> listMembers() {
         return memberRepository.findAllByOrderByNameAsc();
     }
 
-    @GetMapping(value = "/{id:[0-9]+}", produces = "application/json")
+    @GetMapping(value = "/{id:[0-9]+}")
     public Member lookupMemberById(@PathVariable("id") Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createMember(@RequestBody  Member member) {
+    @PostMapping
+    public ResponseEntity<?> createMember(@RequestBody Member member) {
         try {
             // Validates member using bean validation
             validateMember(member);
@@ -94,9 +94,9 @@ public class MemberResourceRESTService {
     public boolean emailAlreadyExists(String email) {
         Member member = null;
         //try {
-            member = memberRepository.findByEmail(email);
+        member = memberRepository.findByEmail(email);
         //} catch (NoResultException e) {
-            // ignore
+        // ignore
         //}
         return member != null;
     }

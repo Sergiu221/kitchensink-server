@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends MongoRepository<Member, Long> {
 
-    Optional<Member> findById(Long id);
+    Optional<Member> findById(@NotNull Long id);
 
     Member findByEmail(@NotNull @NotEmpty @Email String email);
 

@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-public class MemberResourceRESTServiceTests {
+public class MemberControllerTests {
 
     static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:6.0");
 

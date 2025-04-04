@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-
-
 @Service
 public class SequenceGeneratorService {
 
+    private final MongoTemplate mongoTemplate;
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    public SequenceGeneratorService(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     public long generateSequence(String seqName) {
         Sequence sequence = mongoTemplate.findAndModify(
@@ -28,7 +30,6 @@ public class SequenceGeneratorService {
                 Sequence.class
         );
 
-        // Return the updated sequence value
         return (sequence != null) ? sequence.getSeq() : 1L;
     }
 }

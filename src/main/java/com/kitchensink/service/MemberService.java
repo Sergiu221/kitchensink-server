@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class MemberRegistration {
-    private final static Logger log = LoggerFactory.getLogger(MemberRegistration.class);
+public class MemberService {
+    private final static Logger log = LoggerFactory.getLogger(MemberService.class);
 
     private final SequenceGeneratorService sequenceGenerator;
     private final MemberRepository memberRepository;
 
-    public MemberRegistration(SequenceGeneratorService sequenceGenerator, MemberRepository memberRepository) {
+    public MemberService(SequenceGeneratorService sequenceGenerator, MemberRepository memberRepository) {
         this.sequenceGenerator = sequenceGenerator;
         this.memberRepository = memberRepository;
     }
