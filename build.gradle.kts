@@ -29,9 +29,6 @@ dependencies {
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    // Hibernate Validator
-    implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
-
     // Jackson Dataformat XML
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1")
 
