@@ -1,8 +1,8 @@
 package com.kitchensink.service;
 
 import com.kitchensink.data.MemberRepository;
+import com.kitchensink.exception.EmailExistException;
 import com.kitchensink.model.Member;
-import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class MemberService {
     @Transactional
     public void register(Member member) {
         if (memberRepository.existsByEmail(member.getEmail())) {
-            throw new ValidationException("Unique Email Violation");
+            throw new EmailExistException("Unique Email Violation");
         }
         memberValidator.validateMember(member);
         log.info("Registering {}", member.getName());

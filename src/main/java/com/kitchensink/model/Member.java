@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "member")
-public class Member implements Serializable {
+public class Member {
 
     @Field
     private Long id;
@@ -33,7 +33,6 @@ public class Member implements Serializable {
     private String email;
 
     @NotNull
-    @Size(min = 10, max = 12)
     @Digits(fraction = 0, integer = 12)
     @Field
     private String phoneNumber;

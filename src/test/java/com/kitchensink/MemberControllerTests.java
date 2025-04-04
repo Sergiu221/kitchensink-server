@@ -1,5 +1,6 @@
 package com.kitchensink;
 
+import com.kitchensink.exception.ErrorResponse;
 import com.kitchensink.model.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -83,10 +84,10 @@ public class MemberControllerTests {
         member2.setName("Test Second");
         member2.setEmail("test1@test.com");
         member2.setPhoneNumber("2234567890");
-        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member2, new HttpHeaders()), Object.class);
-
+        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member2, new HttpHeaders()), ErrorResponse.class);
+        String message = "Unique Email Violation";
         Assertions.assertEquals(HttpStatus.CONFLICT, Objects.requireNonNull(response.getStatusCode()));
-        Assertions.assertEquals("{email=Email taken}", Objects.requireNonNull(response.getBody()).toString());
+        Assertions.assertEquals(message, ((ErrorResponse) Objects.requireNonNull(response.getBody())).message());
     }
 
     @Test
@@ -97,9 +98,10 @@ public class MemberControllerTests {
         member.setEmail("test1@test.com");
         member.setPhoneNumber("223456789023232");
 
-        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member, new HttpHeaders()), Object.class);
+        ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member, new HttpHeaders()), ErrorResponse.class);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, Objects.requireNonNull(response.getStatusCode()));
-        Assertions.assertEquals("{phoneNumber=numeric value out of bounds (<12 digits>.<0 digits> expected)}", Objects.requireNonNull(response.getBody()).toString());
+        String message = "numeric value out of bounds (<12 digits>.<0 digits> expected)";
+        Assertions.assertEquals(message, ((ErrorResponse) Objects.requireNonNull(response.getBody())).message());
     }
 }
