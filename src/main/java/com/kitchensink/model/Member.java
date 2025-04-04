@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Size;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -46,6 +47,7 @@ public class Member implements Serializable {
     @NotEmpty
     @Email
     @Field
+    @Indexed(unique = true)
     private String email;
 
     @NotNull
