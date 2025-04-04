@@ -1,6 +1,7 @@
 package com.kitchensink.data;
 
 import com.kitchensink.model.Member;
+import com.mongodb.lang.NonNull;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends MongoRepository<Member, Long> {
 
-    Optional<Member> findById(@NotNull Long id);
+    @NonNull Optional<Member> findById(@NotNull Long id);
 
     boolean existsByEmail(@NotNull @NotEmpty @Email String email);
 

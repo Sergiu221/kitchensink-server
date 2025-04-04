@@ -42,6 +42,6 @@ public class MemberService {
     }
 
     public Member findMember(Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return memberRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Member does not exist"));
     }
 }
