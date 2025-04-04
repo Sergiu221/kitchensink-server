@@ -13,7 +13,7 @@ public interface MemberRepository extends MongoRepository<Member, Long> {
 
     Optional<Member> findById(@NotNull Long id);
 
-    Member findByEmail(@NotNull @NotEmpty @Email String email);
+    boolean existsByEmail(@NotNull @NotEmpty @Email String email);
 
     List<Member> findAllByOrderByNameAsc();
 }

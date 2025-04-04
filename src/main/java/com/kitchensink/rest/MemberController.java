@@ -1,53 +1,43 @@
 package com.kitchensink.rest;
 
-import com.kitchensink.data.MemberRepository;
 import com.kitchensink.model.Member;
 import com.kitchensink.service.MemberService;
 import jakarta.validation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import jakarta.validation.Validator;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/rest/members")
 public class MemberController {
 
-    private final static Logger log = Logger.getLogger(MemberController.class.getName());
-
-    private final Validator validator;
-    private final MemberRepository memberRepository;
-    private final MemberService registration;
+    private final static Logger log = LoggerFactory.getLogger(MemberController.class);
+    private final MemberService memberService;
 
     @Autowired
-    public MemberController(MemberRepository memberRepository, MemberService registration, Validator validator) {
-        this.memberRepository = memberRepository;
-        this.registration = registration;
-        this.validator = validator;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping
     public List<Member> listMembers() {
-        return memberRepository.findAllByOrderByNameAsc();
+        return memberService.findAllByOrderByNameAsc();
     }
 
     @GetMapping(value = "/{id:[0-9]+}")
     public Member lookupMemberById(@PathVariable("id") Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return memberService.findMember(id);
     }
 
     @PostMapping
     public ResponseEntity<?> createMember(@RequestBody Member member) {
         try {
-            // Validates member using bean validation
-            validateMember(member);
-
-            registration.register(member);
+            memberService.register(member);
 
         } catch (ConstraintViolationException ce) {
             // Handle bean validation issues
@@ -66,22 +56,8 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    private void validateMember(Member member) throws ConstraintViolationException, ValidationException {
-        // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Member>> violations = validator.validate(member);
-
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<>(violations));
-        }
-
-        // Check the uniqueness of the email address
-        if (emailAlreadyExists(member.getEmail())) {
-            throw new ValidationException("Unique Email Violation");
-        }
-    }
-
     private ResponseEntity<?> createViolationResponse(Set<ConstraintViolation<?>> violations) {
-        log.fine("Validation completed. violations found: " + violations.size());
+        log.error("Validation completed. violations found: {}", violations.size());
 
         Map<String, String> responseObj = new HashMap<>();
 
@@ -89,15 +65,5 @@ public class MemberController {
             responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseObj);
-    }
-
-    public boolean emailAlreadyExists(String email) {
-        Member member = null;
-        //try {
-        member = memberRepository.findByEmail(email);
-        //} catch (NoResultException e) {
-        // ignore
-        //}
-        return member != null;
     }
 }

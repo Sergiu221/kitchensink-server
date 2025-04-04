@@ -100,6 +100,6 @@ public class MemberControllerTests {
         ResponseEntity<?> response = testRestTemplate.postForEntity(url, new HttpEntity<>(member, new HttpHeaders()), Object.class);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, Objects.requireNonNull(response.getStatusCode()));
-        Assertions.assertEquals("{phoneNumber=size must be between 10 and 12}", Objects.requireNonNull(response.getBody()).toString());
+        Assertions.assertEquals("{phoneNumber=numeric value out of bounds (<12 digits>.<0 digits> expected)}", Objects.requireNonNull(response.getBody()).toString());
     }
 }

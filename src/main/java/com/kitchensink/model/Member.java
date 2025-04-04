@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Member implements Serializable {
 
     @Field
-    @NotNull
     private Long id;
 
     @NotNull
