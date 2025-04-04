@@ -4,7 +4,6 @@ import com.kitchensink.model.Member;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Set;
 
@@ -13,7 +12,6 @@ public class MemberValidator {
 
     private final Validator validator;
 
-    @Autowired
     public MemberValidator(Validator validator) {
 
         this.validator = validator;

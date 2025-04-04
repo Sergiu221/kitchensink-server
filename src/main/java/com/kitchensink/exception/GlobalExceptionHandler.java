@@ -1,6 +1,5 @@
 package com.kitchensink.exception;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,6 @@ package com.kitchensink.rest;
 
 import com.kitchensink.model.Member;
 import com.kitchensink.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.util.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
